@@ -2,197 +2,41 @@
 
 MagentaA11y MCP Server
 
-A Model Context Protocol (MCP) server built with FastMCP 2.0 that provides accessibility testing documentation from T-Mobile's [MagentaA11y project](https://github.com/tmobile/magentaA11y).
+A Model Context Protocol (MCP) server that provides accessibility testing documentation from T-Mobile's [MagentaA11y project](https://github.com/tmobile/magentaA11y).
 
 ## About MagentaA11y
 
 MagentaA11y is an open-source accessibility testing documentation project by T-Mobile that provides comprehensive guidance for testing web and native applications for accessibility compliance. This MCP server makes that documentation easily accessible to AI assistants.
 
-## Available Tools
+## Installation
 
-This server includes the following tools:
+Add this server to your MCP settings file:
 
-| Tool | Description |
-|------|-------------|
-| `list_web_components` | Lists all available web accessibility components |
-| `get_web_component` | Gets detailed accessibility criteria for a web component |
-| `search_web_criteria` | Searches for web accessibility criteria by keyword |
-| `list_native_components` | Lists all available native (iOS/Android) accessibility components |
-| `get_native_component` | Gets detailed accessibility criteria for a native component |
-| `search_native_criteria` | Searches for native accessibility criteria by keyword |
-| `get_component_gherkin` | Gets Gherkin-style acceptance criteria for a component |
-| `get_component_condensed` | Gets condensed acceptance criteria for quick reference |
-| `get_component_developer_notes` | Gets developer implementation notes with code examples |
-| `get_component_native_notes` | Gets platform-specific (iOS/Android) implementation notes |
-| `list_component_formats` | Lists all available documentation formats for a component |
-| `get_server_info` | Returns information about this MCP server |
+**For Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%/Claude/claude_desktop_config.json` on Windows):
 
-## Data Source
+```json
+{
+  "mcpServers": {
+    "magentaa11y": {
+      "type": "http",
+      "url": "https://your-deployment-url.fastmcp.app/mcp"
+    }
+  }
+}
+```
 
-This server uses data from the [MagentaA11y GitHub repository](https://github.com/tmobile/magentaA11y), which is included as a git submodule. The content includes:
+**For Cline/VS Code** (`.vscode/mcp.json` or User settings):
 
-- **Web accessibility patterns**: Buttons, forms, navigation, modals, etc.
-- **Native mobile patterns**: iOS and Android accessibility patterns
-- **How-to-test guides**: Step-by-step testing instructions
-- **Developer notes**: Code examples and implementation guidance
+```json
+{
+  "servers": {
+    "magentaa11y": {
+      "type": "http",
+      "url": "https://your-deployment-url.fastmcp.app/mcp"
+    Developer notes**: Code examples and implementation guidance
 - **Test criteria**: Gherkin-style acceptance criteria and condensed test instructions
 
-### Automatic Updates
-
-A GitHub Actions workflow automatically:
-- Updates the MagentaA11y submodule weekly (every Sunday at 2 AM UTC)
-- Rebuilds the content data from the latest documentation
-- Commits and pushes the updates
-
-You can also manually trigger updates from the GitHub Actions tab.
-
-## Project Structure
-
-- `server.py` - Main FastMCP server with accessibility tool definitions
-- `requirements.txt` - Python dependencies
-- `data/magentaA11y/` - Git submodule containing the MagentaA11y repository
-  - `src/shared/content.json` - Generated content (used directly by the server)
-- `.github/workflows/update-submodule.yml` - Weekly automated update workflow
-
-## Local Development
-
-### Prerequisites
-- Python 3.8 or higher
-- Node.js 18+ and npm (for building MagentaA11y content)
-- Git
-
-### Installation
-
-1. Clone the repository with submodules:
-```bash
-git clone --recurse-submodules <your-repo-url>
-cd magentaa11y-mcp
-
-# Or if already cloned without submodules:
-git submodule update --init --recursive
-```
-
-2. Create a virtual environment (recommended):
-```bash
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# macOS/Linux
-source venv/bin/activate
-```
-
-3. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Build the content data from MagentaA11y:
-```bash
-cd data/magentaA11y
-npm install
-npm run build
-cd ../..
-```
-
-The server will use the generated `content.json` directly from the submodule at `data/magentaA11y/src/shared/content.json`.
-
-### Running Locally
-
-Start the FastMCP server:
-```bash
-python server.py
-```
-
-Or use the FastMCP CLI:
-```bash
-fastmcp run server.py:mcp
-```
-
-### Configure Claude Desktop (Local)
-
-Add this to your Claude Desktop MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "magentaa11y": {
-      "command": "python",
-      "args": ["c:/sites/mcp-test-with-fastmcp/server.py"]
-    }
-  }
-}
-```
-
-Or if using the virtual environment:
-
-```json
-{
-  "mcpServers": {
-    "magentaa11y": {
-      "command": "c:/sites/mcp-test-with-fastmcp/venv/Scripts/python.exe",
-      "args": ["c:/sites/mcp-test-with-fastmcp/server.py"]
-    }
-  }
-}
-```
-
-## Updating MagentaA11y Content
-
-### Automatic Updates (Recommended)
-
-The GitHub Actions workflow automatically updates the content weekly. You can also manually trigger it:
-
-1. Go to your repository's Actions tab on GitHub
-2. Select the "Update MagentaA11y Submodule" workflow
-3. Click "Run workflow"
-
-### Manual Updates
-
-To manually update the MagentaA11y content:
-
-```bash
-# Update the submodule
-git submodule update --remote --merge data/magentaA11y
-
-# Rebuild the content
-cd data/magentaA11y
-npm install
-npm run build
-cd ../..
-
-# Commit the changes (the submodule tracks the content.json file)
-git add data/magentaA11y
-git commit -m "chore: update MagentaA11y submodule"
-git push
-```
-
-## Deployment to FastMCP Cloud
-
-### Quick Start
-
-1. **Visit FastMCP Cloud**
-   - Navigate to [fastmcp.cloud](https://fastmcp.cloud/)
-   - Sign in with your GitHub account
-
-2. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/magentaa11y-mcp.git
-   git push -u origin main
-   ```
-
-3. **Create a Project**
-   - Click "Create a Project" in FastMCP Cloud
-   - Choose your GitHub repository
-   - Configure:
-     - **Name**: `magentaa11y-mcp` (or your preferred name)
-     - **Entrypoint**: `server.py:mcp`
-     - **Authentication**: Choose public or private access
-   - Click "Deploy"
+The data is automatically updated weekly via GitHub Actions.- Click "Deploy"
 
 4. **Connect to Your Server**
    Once deployed, your server is available at:
