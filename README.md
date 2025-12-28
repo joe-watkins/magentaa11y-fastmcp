@@ -36,6 +36,19 @@ pip install -r requirements.txt
 fastmcp dev server.py:mcp
 ```
 
+**Updating data:** The `data/content.json` file contains MagentaA11y documentation. To update it:
+
+```bash
+# Update submodule, build it, and copy content.json
+git submodule update --init --remote
+cd data/magentaA11y
+npm ci && npm run build
+cd ../..
+python update_data.py
+```
+
+Or use the GitHub Actions workflow (runs weekly automatically).
+
 ## Usage
 
 Example prompts:
