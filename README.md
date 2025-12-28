@@ -33,12 +33,37 @@ Add this server to your MCP settings file:
     "magentaa11y": {
       "type": "http",
       "url": "https://your-deployment-url.fastmcp.app/mcp"
-    Developer notes**: Code examples and implementation guidance
-- **Test criteria**: Gherkin-style acceptance criteria and condensed test instructions
+    }
+  }
+}
+```
 
-The data is automatically updated weekly via GitHub Actions.- Click "Deploy"
+## Available Tools
 
-4. **Connect to Your Server**
+This MCP server provides the following tools:
+
+- **Component listings**: Browse all available web and native components
+- **Component details**: Get comprehensive accessibility testing documentation
+- **Search**: Find components by name or keywords
+- **Multiple formats**:
+  - **Developer notes**: Code examples and implementation guidance
+  - **Test criteria**: Gherkin-style acceptance criteria and condensed test instructions
+
+The data is automatically updated weekly via GitHub Actions.
+
+## Deployment with FastMCP Cloud
+
+1. **Prerequisites**
+   - GitHub repository (public or private)
+   - FastMCP Cloud account
+
+2. **Deploy to FastMCP Cloud**
+   - Visit [fastmcp.cloud](https://fastmcp.cloud/)
+   - Connect your GitHub account
+   - Select this repository
+   - Click "Deploy"
+
+3. **Connect to Your Server**
    Once deployed, your server is available at:
    ```
    https://your-project-name.fastmcp.app/mcp
@@ -124,6 +149,12 @@ Changes to MagentaA11y will be automatically picked up by this server through th
 - [MagentaA11y Project](https://www.magentaa11y.com/)
 - [MagentaA11y GitHub](https://github.com/tmobile/magentaA11y)
 - [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG22/quickref/)
+
+## Contributing
+
+This server wrapper is maintained at [joe-watkins/magentaa11y-fastmcp](https://github.com/joe-watkins/magentaa11y-fastmcp).
+
+To contribute to the MagentaA11y documentation itself, visit the [MagentaA11y repository](https://github.com/tmobile/magentaA11y). Changes to MagentaA11y will be automatically picked up by this server through the weekly update workflow.
 
 ## License
 
