@@ -273,4 +273,10 @@ Changes to MagentaA11y will be automatically picked up by this server through th
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
 - [FastMCP Documentation](https://github.com/jlowin/fastmcp)
 - [FastMCP Cloud](https://fastmcp.cloud/)
-- [Python Type Hints](https://docs.python.org/3/library/typing.html)
+- [MagentaA11y Project](https://www.magentaa11y.com/)
+- [MagentaA11y GitHub](https://github.com/tmobile/magentaA11y)
+- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG22/quickref/)
+
+## License
+
+This MCP server wrapper is provided as-is. The MagentaA11y content is subject to its own license - see the [MagentaA11y repository](https://github.com/tmobile/magentaA11y) for details.
