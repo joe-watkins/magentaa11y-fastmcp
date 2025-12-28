@@ -25,23 +25,134 @@ DATA = load_data()
 
 
 @mcp.tool()
-def list_issue_templates() -> str:
+def list_web_components() -> str:
     """
-    Lists all available accessibility issue templates from MagentaA11y.
-    
-    Returns information about the different categories (web, native, how-to-test)
-    and the types of accessibility issues documented.
+    Lists all available web accessibility components from MagentaA11y.
     
     Returns:
-        Formatted list of all available templates organized by category
+        Formatted list of all web components organized by type
     """
-    result = "# MagentaA11y Accessibility Issue Templates\n\n"
+    items = DATA.get('web', [])
+    count = count_templates(items)
     
-    for category, items in DATA.items():
-        result += f"## {category.upper()}\n\n"
-        count = count_templates(items)
-        result += f"Total templates: {count}\n\n"
-        result += format_template_list(items, level=3)
+    result = "# Web Accessibility Components\n\n"
+    result += f"**Total components:** {count}\n\n"
+    result += format_template_list(items, level=1)
+    
+    return result
+
+
+@mcp.tool()
+def get_web_component(component_name: str) -> str:
+    """
+    Gets detailed accessibility criteria for a web component.
+    
+    Args:
+        component_name: Name of the component (e.g., 'button', 'modal-dialog', 'form')
+    
+    Returns:
+        Complete component documentation including all available sections
+    """
+    items = DATA.get('web', [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Web component '{component_name}' not found.\n\nUse list_web_components() to see available components."
+    
+    return format_component_details(template, 'web', component_name)
+
+
+@mcp.tool()
+def search_web_criteria(query: str) -> str:
+    """
+    Searches for web accessibility criteria by keyword.
+    
+    Args:
+        query: Search term (searches in component names and labels)
+    
+    Returns:
+        List of matching web components
+    """
+    items = DATA.get('web', [])
+    matches = search_in_items(items, query.lower(), 'web')
+    
+    if not matches:
+        return f"No web components found matching '{query}'."
+    
+    result = f"# Web Components matching '{query}'\n\n"
+    result += f"Found {len(matches)} component(s):\n\n"
+    
+    for match in matches:
+        result += f"• **{match['label']}** (`{match['name']}`)\n"
+        if 'path' in match:
+            result += f"  Path: {match['path']}\n"
+        result += "\n"
+    
+    return result
+
+
+@mcp.tool()
+def list_native_components() -> str:
+    """
+    Lists all available native (iOS/Android) accessibility components.
+    
+    Returns:
+        Formatted list of all native components organized by type
+    """
+    items = DATA.get('native', [])
+    count = count_templates(items)
+    
+    result = "# Native Accessibility Components\n\n"
+    result += f"**Total components:** {count}\n\n"
+    result += format_template_list(items, level=1)
+    
+    return result
+
+
+@mcp.tool()
+def get_native_component(component_name: str) -> str:
+    """
+    Gets detailed accessibility criteria for a native iOS/Android component.
+    
+    Args:
+        component_name: Name of the component (e.g., 'button', 'switch', 'picker')
+    
+    Returns:
+        Complete component documentation including all available sections
+    """
+    items = DATA.get('native', [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Native component '{component_name}' not found.\n\nUse list_native_components() to see available components."
+    
+    return format_component_details(template, 'native', component_name)
+
+
+@mcp.tool()
+def search_native_criteria(query: str) -> str:
+    """
+    Searches for native accessibility criteria by keyword.
+    
+    Args:
+        query: Search term (searches in component names and labels)
+    
+    Returns:
+        List of matching native components
+    """
+    items = DATA.get('native', [])
+    matches = search_in_items(items, query.lower(), 'native')
+    
+    if not matches:
+        return f"No native components found matching '{query}'."
+    
+    result = f"# Native Components matching '{query}'\n\n"
+    result += f"Found {len(matches)} component(s):\n\n"
+    
+    for match in matches:
+        result += f"• **{match['label']}** (`{match['name']}`)\n"
+        if 'path' in match:
+            result += f"  Path: {match['path']}\n"
         result += "\n"
     
     return result
@@ -71,41 +182,167 @@ def format_template_list(items: List[Dict[str, Any]], level: int = 1) -> str:
 
 
 @mcp.tool()
-def get_issue_template(category: str, template_name: str) -> str:
+def get_component_gherkin(category: str, component_name: str) -> str:
     """
-    Retrieves the content of a specific accessibility issue template.
+    Gets Gherkin-style acceptance criteria for a component.
     
     Args:
-        category: The category (web, native, how-to-test)
-        template_name: The name of the template (e.g., 'alert-notification', 'button')
+        category: Component category ('web' or 'native')
+        component_name: Name of the component
     
     Returns:
-        The full template content including all sections (general notes, gherkin, criteria, etc.)
+        Gherkin-style acceptance criteria formatted for BDD testing
     """
     items = DATA.get(category, [])
-    template = find_template(items, template_name)
+    template = find_template(items, component_name)
     
     if not template:
-        return f"Template '{template_name}' not found in category '{category}'.\n\nUse list_issue_templates() to see available templates."
+        return f"Component '{component_name}' not found in {category} category."
     
-    result = f"# {template['label']}\n\n"
+    result = f"# {template['label']} - Gherkin Acceptance Criteria\n\n"
+    
+    if 'gherkin' in template and template['gherkin']:
+        result += template['gherkin']
+    else:
+        result += "No Gherkin criteria available for this component.\n"
+        result += f"\nUse list_component_formats('{category}', '{component_name}') to see available formats."
+    
+    return result
+
+
+@mcp.tool()
+def get_component_condensed(category: str, component_name: str) -> str:
+    """
+    Gets condensed acceptance criteria for quick reference.
+    
+    Args:
+        category: Component category ('web' or 'native')
+        component_name: Name of the component
+    
+    Returns:
+        Condensed acceptance criteria for quick testing reference
+    """
+    items = DATA.get(category, [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Component '{component_name}' not found in {category} category."
+    
+    result = f"# {template['label']} - Condensed Criteria\n\n"
+    
+    if 'condensed' in template and template['condensed']:
+        result += template['condensed']
+    else:
+        result += "No condensed criteria available for this component.\n"
+        result += f"\nUse list_component_formats('{category}', '{component_name}') to see available formats."
+    
+    return result
+
+
+@mcp.tool()
+def get_component_developer_notes(category: str, component_name: str) -> str:
+    """
+    Gets developer implementation notes with code examples.
+    
+    Args:
+        category: Component category ('web' or 'native')
+        component_name: Name of the component
+    
+    Returns:
+        Developer notes including code examples and implementation guidance
+    """
+    items = DATA.get(category, [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Component '{component_name}' not found in {category} category."
+    
+    result = f"# {template['label']} - Developer Notes\n\n"
+    
+    if 'developerNotes' in template and template['developerNotes']:
+        result += template['developerNotes']
+    else:
+        result += "No developer notes available for this component.\n"
+        result += f"\nUse list_component_formats('{category}', '{component_name}') to see available formats."
+    
+    return result
+
+
+@mcp.tool()
+def get_component_native_notes(category: str, component_name: str, platform: str) -> str:
+    """
+    Gets platform-specific implementation notes for native components.
+    
+    Args:
+        category: Component category (usually 'native')
+        component_name: Name of the component
+        platform: Platform ('ios' or 'android')
+    
+    Returns:
+        Platform-specific developer notes and implementation guidance
+    """
+    items = DATA.get(category, [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Component '{component_name}' not found in {category} category."
+    
+    result = f"# {template['label']} - {platform.upper()} Notes\n\n"
+    
+    key = 'iosDeveloperNotes' if platform.lower() == 'ios' else 'androidDeveloperNotes'
+    
+    if key in template and template[key]:
+        result += template[key]
+    else:
+        result += f"No {platform.upper()} specific notes available for this component.\n"
+        result += f"\nUse list_component_formats('{category}', '{component_name}') to see available formats."
+    
+    return result
+
+
+@mcp.tool()
+def list_component_formats(category: str, component_name: str) -> str:
+    """
+    Lists all available documentation formats for a specific component.
+    
+    Args:
+        category: Component category ('web' or 'native')
+        component_name: Name of the component
+    
+    Returns:
+        List of available documentation sections for the component
+    """
+    items = DATA.get(category, [])
+    template = find_template(items, component_name)
+    
+    if not template:
+        return f"Component '{component_name}' not found in {category} category."
+    
+    result = f"# {template['label']} - Available Formats\n\n"
     result += f"**Category:** {category}\n"
-    result += f"**Name:** {template['name']}\n\n"
+    result += f"**Component:** {component_name}\n\n"
     
     sections = [
         ('generalNotes', 'General Notes'),
         ('gherkin', 'Gherkin Acceptance Criteria'),
         ('condensed', 'Condensed Criteria'),
-        ('criteria', 'Criteria'),
-        ('videos', 'Videos'),
+        ('criteria', 'Detailed Criteria'),
+        ('videos', 'Video Examples'),
+        ('developerNotes', 'Developer Notes'),
         ('androidDeveloperNotes', 'Android Developer Notes'),
         ('iosDeveloperNotes', 'iOS Developer Notes'),
-        ('developerNotes', 'Developer Notes'),
     ]
     
+    available = []
     for key, title in sections:
         if key in template and template[key]:
-            result += f"## {title}\n\n{template[key]}\n\n"
+            available.append(f"• **{title}** (`{key}`)")
+    
+    if available:
+        result += "## Available Sections\n\n"
+        result += "\n".join(available)
+    else:
+        result += "No documentation sections available for this component."
     
     return result
 
@@ -122,39 +359,26 @@ def find_template(items: List[Dict[str, Any]], name: str) -> Optional[Dict[str, 
     return None
 
 
-@mcp.tool()
-def search_templates(query: str, category: Optional[str] = None) -> str:
-    """
-    Searches for accessibility templates by keyword.
+def format_component_details(template: Dict[str, Any], category: str, name: str) -> str:
+    """Format complete component details"""
+    result = f"# {template['label']}\n\n"
+    result += f"**Category:** {category}\n"
+    result += f"**Component:** {name}\n\n"
     
-    Args:
-        query: Search term (searches in template names and labels)
-        category: Optional category filter (web, native, how-to-test)
+    sections = [
+        ('generalNotes', 'General Notes'),
+        ('gherkin', 'Gherkin Acceptance Criteria'),
+        ('condensed', 'Condensed Criteria'),
+        ('criteria', 'Detailed Criteria'),
+        ('videos', 'Video Examples'),
+        ('developerNotes', 'Developer Notes'),
+        ('androidDeveloperNotes', 'Android Developer Notes'),
+        ('iosDeveloperNotes', 'iOS Developer Notes'),
+    ]
     
-    Returns:
-        List of matching templates with their categories and names
-    """
-    query_lower = query.lower()
-    results = []
-    
-    categories_to_search = [category] if category else DATA.keys()
-    
-    for cat in categories_to_search:
-        if cat in DATA:
-            matches = search_in_items(DATA[cat], query_lower, cat)
-            results.extend(matches)
-    
-    if not results:
-        return f"No templates found matching '{query}'."
-    
-    result = f"# Search Results for '{query}'\n\n"
-    result += f"Found {len(results)} template(s):\n\n"
-    
-    for match in results:
-        result += f"• **{match['label']}** ({match['category']}/{match['name']})\n"
-        if 'path' in match:
-            result += f"  Path: {match['path']}\n"
-        result += "\n"
+    for key, title in sections:
+        if key in template and template[key]:
+            result += f"## {title}\n\n{template[key]}\n\n"
     
     return result
 
@@ -180,127 +404,6 @@ def search_in_items(items: List[Dict[str, Any]], query: str, category: str, path
 
 
 @mcp.tool()
-def get_category_info(category: str) -> str:
-    """
-    Gets information about a specific accessibility category.
-    
-    Args:
-        category: The category name (web, native, how-to-test)
-    
-    Returns:
-        Overview of the category and its templates
-    """
-    if category not in DATA:
-        return f"Category '{category}' not found. Available categories: {', '.join(DATA.keys())}"
-    
-    items = DATA[category]
-    count = count_templates(items)
-    
-    result = f"# {category.upper()} Accessibility Templates\n\n"
-    result += f"**Total templates:** {count}\n\n"
-    result += "## Structure\n\n"
-    result += format_template_list(items, level=1)
-    
-    return result
-
-
-@mcp.tool()
-def get_developer_notes(category: str, template_name: str) -> str:
-    """
-    Gets just the developer notes section from a template.
-    
-    Args:
-        category: The category (web, native, how-to-test)
-        template_name: The name of the template
-    
-    Returns:
-        Developer notes with code examples
-    """
-    items = DATA.get(category, [])
-    template = find_template(items, template_name)
-    
-    if not template:
-        return f"Template '{template_name}' not found in category '{category}'."
-    
-    result = f"# {template['label']} - Developer Notes\n\n"
-    
-    notes_sections = [
-        ('developerNotes', 'Developer Notes'),
-        ('androidDeveloperNotes', 'Android Developer Notes'),
-        ('iosDeveloperNotes', 'iOS Developer Notes'),
-    ]
-    
-    found_notes = False
-    for key, title in notes_sections:
-        if key in template and template[key]:
-            result += f"## {title}\n\n{template[key]}\n\n"
-            found_notes = True
-    
-    if not found_notes:
-        result += "No developer notes available for this template.\n"
-    
-    return result
-
-
-@mcp.tool()
-def get_test_criteria(category: str, template_name: str, format: str = "condensed") -> str:
-    """
-    Gets testing criteria for an accessibility issue.
-    
-    Args:
-        category: The category (web, native, how-to-test)
-        template_name: The name of the template
-        format: Format type - 'condensed', 'gherkin', or 'general' (default: 'condensed')
-    
-    Returns:
-        Testing criteria in the requested format
-    """
-    items = DATA.get(category, [])
-    template = find_template(items, template_name)
-    
-    if not template:
-        return f"Template '{template_name}' not found in category '{category}'."
-    
-    result = f"# {template['label']} - Test Criteria\n\n"
-    
-    format_key = {
-        'condensed': 'condensed',
-        'gherkin': 'gherkin',
-        'general': 'generalNotes'
-    }.get(format, 'condensed')
-    
-    if format_key in template and template[format_key]:
-        result += template[format_key]
-    else:
-        result += f"No {format} criteria available for this template.\n"
-        result += "\nAvailable formats:\n"
-        for key in ['condensed', 'gherkin', 'generalNotes']:
-            if key in template and template[key]:
-                result += f"• {key}\n"
-    
-    return result
-
-
-@mcp.tool()
-def list_categories() -> str:
-    """
-    Lists all available accessibility documentation categories.
-    
-    Returns:
-        List of categories with template counts
-    """
-    result = "# MagentaA11y Categories\n\n"
-    
-    for category, items in DATA.items():
-        count = count_templates(items)
-        result += f"• **{category}**: {count} templates\n"
-    
-    result += "\nUse get_category_info(category) to see details about a specific category.\n"
-    
-    return result
-
-
-@mcp.tool()
 def get_server_info() -> str:
     """
     Returns information about this MCP server.
@@ -308,23 +411,37 @@ def get_server_info() -> str:
     Returns:
         Server information and data source details
     """
-    total_templates = sum(count_templates(items) for items in DATA.values())
+    web_count = count_templates(DATA.get('web', []))
+    native_count = count_templates(DATA.get('native', []))
+    total_templates = web_count + native_count
     
     return f"""**MagentaA11y MCP Server** v1.0.0
 
 This server provides accessibility testing documentation from T-Mobile's MagentaA11y project.
 
 **Data Source:** https://github.com/tmobile/magentaA11y
-**Total Templates:** {total_templates}
-**Categories:** {', '.join(DATA.keys())}
+**Total Components:** {total_templates}
+  - Web: {web_count}
+  - Native: {native_count}
 
 MagentaA11y is a comprehensive accessibility testing documentation resource that provides:
 - Detailed testing criteria for web and native components
 - Code examples and developer notes
 - Gherkin-style acceptance criteria
-- How-to-test guides
+- Platform-specific implementation guidance
 
-Use list_issue_templates() to explore available templates."""
+Available Tools:
+- list_web_components() - List all web components
+- get_web_component(name) - Get detailed web component criteria
+- search_web_criteria(query) - Search web components
+- list_native_components() - List all native components
+- get_native_component(name) - Get detailed native component criteria
+- search_native_criteria(query) - Search native components
+- get_component_gherkin(category, name) - Get Gherkin criteria
+- get_component_condensed(category, name) - Get condensed criteria
+- get_component_developer_notes(category, name) - Get code examples
+- get_component_native_notes(category, name, platform) - Get iOS/Android notes
+- list_component_formats(category, name) - See available formats"""
 
 
 if __name__ == "__main__":

@@ -14,14 +14,18 @@ This server includes the following tools:
 
 | Tool | Description |
 |------|-------------|
-| `list_issue_templates` | Lists all available accessibility templates organized by category (web, native, how-to-test) |
-| `get_issue_template` | Retrieves the full content of a specific template including all sections |
-| `search_templates` | Searches for templates by keyword across all categories |
-| `get_category_info` | Gets detailed information about a specific category and its templates |
-| `list_categories` | Lists all available categories with template counts |
-| `get_developer_notes` | Extracts just the developer notes section from a template (with code examples) |
-| `get_test_criteria` | Gets testing criteria in condensed, gherkin, or general format |
-| `get_server_info` | Returns information about this MCP server and data source |
+| `list_web_components` | Lists all available web accessibility components |
+| `get_web_component` | Gets detailed accessibility criteria for a web component |
+| `search_web_criteria` | Searches for web accessibility criteria by keyword |
+| `list_native_components` | Lists all available native (iOS/Android) accessibility components |
+| `get_native_component` | Gets detailed accessibility criteria for a native component |
+| `search_native_criteria` | Searches for native accessibility criteria by keyword |
+| `get_component_gherkin` | Gets Gherkin-style acceptance criteria for a component |
+| `get_component_condensed` | Gets condensed acceptance criteria for quick reference |
+| `get_component_developer_notes` | Gets developer implementation notes with code examples |
+| `get_component_native_notes` | Gets platform-specific (iOS/Android) implementation notes |
+| `list_component_formats` | Lists all available documentation formats for a component |
+| `get_server_info` | Returns information about this MCP server |
 
 ## Data Source
 
@@ -227,23 +231,35 @@ fastmcp inspect server.py:mcp
 Here are some example queries you can use with this MCP server:
 
 ```
-# List all available templates
-list_issue_templates()
-
-# Get information about web accessibility patterns
-get_category_info("web")
+# List all web components
+list_web_components()
 
 # Get detailed information about button accessibility
-get_issue_template("web", "button")
+get_web_component("button")
 
-# Search for form-related templates
-search_templates("form")
+# Search for form-related web components
+search_web_criteria("form")
 
-# Get developer notes with code examples for modals
-get_developer_notes("web", "modal-dialog")
+# List all native components
+list_native_components()
 
-# Get condensed test criteria for navigation
-get_test_criteria("web", "navigation", "condensed")
+# Get native switch component details
+get_native_component("switch")
+
+# Get Gherkin criteria for a web modal
+get_component_gherkin("web", "modal-dialog")
+
+# Get condensed test criteria for a button
+get_component_condensed("web", "button")
+
+# Get developer notes with code examples for forms
+get_component_developer_notes("web", "form")
+
+# Get iOS-specific implementation notes
+get_component_native_notes("native", "button", "ios")
+
+# See what formats are available for a component
+list_component_formats("web", "navigation")
 ```
 
 ## Contributing to MagentaA11y
