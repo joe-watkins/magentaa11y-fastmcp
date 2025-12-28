@@ -97,39 +97,18 @@ fastmcp inspect server.py:mcp
 
 ## Example Usage
 
-Here are some example queries you can use with this MCP server:
+Here are some example prompts you can use with this MCP server:
 
-```
-# List all web components
-list_web_components()
-
-# Get detailed information about button accessibility
-get_web_component("button")
-
-# Search for form-related web components
-search_web_criteria("form")
-
-# List all native components
-list_native_components()
-
-# Get native switch component details
-get_native_component("switch")
-
-# Get Gherkin criteria for a web modal
-get_component_gherkin("web", "modal-dialog")
-
-# Get condensed test criteria for a button
-get_component_condensed("web", "button")
-
-# Get developer notes with code examples for forms
-get_component_developer_notes("web", "form")
-
-# Get iOS-specific implementation notes
-get_component_native_notes("native", "button", "ios")
-
-# See what formats are available for a component
-list_component_formats("web", "navigation")
-```
+- "What web components are available for accessibility testing?"
+- "Get me the Button component for native in Gherkin format"
+- "Show me accessibility documentation for web forms"
+- "What are the native components I can test?"
+- "Get developer notes with code examples for the Switch component"
+- "Show me the condensed test criteria for a Modal Dialog"
+- "What's the accessibility guidance for web navigation menus?"
+- "Get iOS-specific implementation notes for buttons"
+- "Search for form-related accessibility components"
+- "What formats are available for the Accordion component?"
 
 ## Contributing to MagentaA11y
 
