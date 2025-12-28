@@ -13,8 +13,8 @@ from typing import Optional, List, Dict, Any
 # Initialize FastMCP server
 mcp = FastMCP("magentaa11y-mcp")
 
-# Load data from JSON file
-DATA_PATH = Path(__file__).parent / "data" / "magenta-a11y-content.json"
+# Load data from JSON file built by MagentaA11y
+DATA_PATH = Path(__file__).parent / "data" / "magentaA11y" / "src" / "shared" / "content.json"
 
 def load_data():
     """Load data at module level for efficiency"""

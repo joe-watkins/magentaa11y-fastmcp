@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 # Load data to test against
-DATA_PATH = Path(__file__).parent / "data" / "magenta-a11y-content.json"
+DATA_PATH = Path(__file__).parent / "data" / "magentaA11y" / "src" / "shared" / "content.json"
 
 def test_data_file_exists():
     """Test that data file exists"""

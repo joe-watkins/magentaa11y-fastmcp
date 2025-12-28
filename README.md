@@ -46,11 +46,10 @@ You can also manually trigger updates from the GitHub Actions tab.
 
 - `server.py` - Main FastMCP server with accessibility tool definitions
 - `requirements.txt` - Python dependencies
-- `data/magenta-a11y-content.json` - Generated JSON data from MagentaA11y
 - `data/magentaA11y/` - Git submodule containing the MagentaA11y repository
+  - `src/shared/content.json` - Generated content (used directly by the server)
 - `test_server.py` - Test script to validate functionality
 - `.github/workflows/update-submodule.yml` - Weekly automated update workflow
-- `scripts/` - Utility scripts (deprecated - using npm build instead)
 
 ## Local Development
 
@@ -92,8 +91,9 @@ cd data/magentaA11y
 npm install
 npm run build
 cd ../..
-cp data/magentaA11y/src/shared/content.json data/magenta-a11y-content.json
 ```
+
+The server will use the generated `content.json` directly from the submodule at `data/magentaA11y/src/shared/content.json`.
 
 ### Testing
 
@@ -166,12 +166,9 @@ npm install
 npm run build
 cd ../..
 
-# Copy the generated content
-cp data/magentaA11y/src/shared/content.json data/magenta-a11y-content.json
-
-# Commit the changes
-git add data/magentaA11y data/magenta-a11y-content.json
-git commit -m "chore: update MagentaA11y content"
+# Commit the changes (the submodule tracks the content.json file)
+git add data/magentaA11y
+git commit -m "chore: update MagentaA11y submodule"
 git push
 ```
 
