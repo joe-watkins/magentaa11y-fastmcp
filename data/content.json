@@ -1,0 +1,77 @@
+{
+  "greetings": {
+    "default": "Hello, {name}! Welcome to mcp-test-with-fastmcp.",
+    "morning": "Good morning, {name}! Hope you have a great day!",
+    "evening": "Good evening, {name}! Thanks for stopping by.",
+    "formal": "Greetings, {name}. We are pleased to have you here.",
+    "casual": "Hey {name}! What's up?"
+  },
+  "echoMessages": {
+    "helloWorld": "Hello, World!",
+    "welcome": "Welcome to the MCP server!",
+    "goodbye": "Goodbye and thanks for using mcp-test-with-fastmcp!"
+  },
+  "items": [
+    {
+      "id": "item-001",
+      "name": "Widget Alpha",
+      "category": "widgets",
+      "description": "A versatile widget for everyday use",
+      "tags": [
+        "utility",
+        "beginner-friendly"
+      ]
+    },
+    {
+      "id": "item-002",
+      "name": "Gadget Beta",
+      "category": "gadgets",
+      "description": "An advanced gadget with multiple features",
+      "tags": [
+        "advanced",
+        "multi-purpose"
+      ]
+    },
+    {
+      "id": "item-003",
+      "name": "Tool Gamma",
+      "category": "tools",
+      "description": "A powerful tool for complex tasks",
+      "tags": [
+        "professional",
+        "high-performance"
+      ]
+    },
+    {
+      "id": "item-004",
+      "name": "Component Delta",
+      "category": "components",
+      "description": "A modular component for building systems",
+      "tags": [
+        "modular",
+        "extensible"
+      ]
+    },
+    {
+      "id": "item-005",
+      "name": "Widget Epsilon",
+      "category": "widgets",
+      "description": "A specialized widget for specific tasks",
+      "tags": [
+        "specialized",
+        "efficient"
+      ]
+    }
+  ],
+  "categories": [
+    "widgets",
+    "gadgets",
+    "tools",
+    "components"
+  ],
+  "serverInfo": {
+    "name": "mcp-test-with-fastmcp",
+    "version": "1.0.0",
+    "description": "My MCP server"
+  }
+}
