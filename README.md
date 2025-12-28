@@ -48,7 +48,6 @@ You can also manually trigger updates from the GitHub Actions tab.
 - `requirements.txt` - Python dependencies
 - `data/magentaA11y/` - Git submodule containing the MagentaA11y repository
   - `src/shared/content.json` - Generated content (used directly by the server)
-- `test_server.py` - Test script to validate functionality
 - `.github/workflows/update-submodule.yml` - Weekly automated update workflow
 
 ## Local Development
@@ -94,13 +93,6 @@ cd ../..
 ```
 
 The server will use the generated `content.json` directly from the submodule at `data/magentaA11y/src/shared/content.json`.
-
-### Testing
-
-Run the test script to validate the server:
-```bash
-python test_server.py
-```
 
 ### Running Locally
 
@@ -223,7 +215,6 @@ git push
 - [x] Server uses relative paths (`Path(__file__).parent`)
 - [x] All tools have docstrings and type hints
 - [x] Server runs locally without errors
-- [x] Test script passes: `python test_server.py`
 - [x] Submodule data is committed
 
 ### Verify Before Deployment
