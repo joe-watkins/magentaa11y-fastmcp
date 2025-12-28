@@ -32,9 +32,13 @@ jobs:
           npm ci
           npm run build
       
+      - name: Copy content.json to data folder
+        run: |
+          cp data/magentaA11y/src/shared/content.json data/content.json
+      
       - name: Commit and push if changed
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add data/magentaA11y
-          git diff --staged --quiet || (git commit -m "chore: update MagentaA11y submodule" && git push)
+          git add data/magentaA11y data/content.json
+          git diff --staged --quiet || (git commit -m "chore: update MagentaA11y submodule and content.json" && git push)

@@ -14,7 +14,8 @@ from typing import Optional, List, Dict, Any
 mcp = FastMCP("magentaa11y-mcp")
 
 # Load data from JSON file built by MagentaA11y
-DATA_PATH = Path(__file__).parent / "data" / "magentaA11y" / "src" / "shared" / "content.json"
+# Note: This file is copied from the submodule via update_data.py script
+DATA_PATH = Path(__file__).parent / "data" / "content.json"
 
 def load_data():
     """Load data at module level for efficiency"""
