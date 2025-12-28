@@ -19,11 +19,21 @@ Add to your MCP settings:
 
 ## Deployment
 
-Deploy to [FastMCP Cloud](https://fastmcp.cloud/) or run locally:
+### FastMCP Cloud (Recommended)
+
+1. Visit [fastmcp.cloud](https://fastmcp.cloud/) and sign in with GitHub
+2. Click "New Server" and select this repository
+3. Set entrypoint to `server.py:mcp` (usually auto-detected)
+4. Click "Deploy" - your server will be live at `https://your-project-name.fastmcp.app/mcp`
+5. Copy the provided config and add it to your MCP client settings
+
+**Auto-updates:** Pushes to `main` automatically redeploy. Pull requests get preview URLs for testing.
+
+### Local Development
 
 ```bash
 pip install -r requirements.txt
-fastmcp dev server.py
+fastmcp dev server.py:mcp
 ```
 
 ## Usage
